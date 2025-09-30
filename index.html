@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>أبطال سكراتش</title>
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background: #fef6e4;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #ff6b6b;
+      font-size: 2.5em;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px #ffd166;
+      z-index: 2;
+      position: relative;
+    }
+    h2 {
+      color: #fff;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #ffb703, #ff6b6b);
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 25px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      z-index: 2;
+      position: relative;
+    }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      width: 85%;
+      background: #ffffffcc;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    th, td {
+      padding: 15px;
+      border: 2px solid #ffb703;
+      font-size: 1.1em;
+    }
+    th {
+      background: linear-gradient(90deg, #ff6b6b, #ffb703);
+      color: white;
+      font-size: 1.2em;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px #444;
+    }
+    tr:hover {
+      background-color: #fff3cd;
+      transition: background 0.3s ease;
+    }
+    .star {
+      display: inline-block;
+      background: #ffe66d;
+      padding: 8px;
+      border-radius: 50%;
+      margin: 3px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .star::before {
+      content: "⭐";
+      font-size: 1.3em;
+    }
+    tr:hover .star {
+      transform: scale(1.3) rotate(10deg);
+      cursor: pointer;
+    }
+    .remaining {
+      background: #ff6b6b;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 0.9em;
+      display: inline-block;
+      min-width: 20px;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); background: #ff4040; }
+    }
+
+    .bg-icon {
+      position: fixed;
+      bottom: -50px;
+      font-size: 2em;
+      opacity: 0.15;
+      animation: floatUp linear infinite;
+      z-index: 0;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-120vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌟أبطال سكراتش🌟</h1>
+  <h2>تتبع إنجازات الطلاب المميزين</h2>
+
+  <table id="studentsTable">
+    <tr>
+      <th>اسم الطالب</th>
+      <th>التطبيقات</th>
+      <th>متبقي</th>
+    </tr>
+  </table>
+
+  <script>
+    // دالة لتشغيل الصوت
+    function playSound(frequency) {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = frequency;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+
+    const students = [
+      { name: "عمر درويش", apps: 10, total: 10 },
+      { name: "مالك محمود", apps: 9, total: 10 },
+      { name: "يارا مسعود", apps: 9, total: 10 },
+      { name: "مريم يوسف أبوهويدي", apps: 9, total: 10 },
+      { name: "رهف الاطرش", apps: 9, total: 10 },
+      { name: "ديمة الحسيني", apps: 9, total: 10 },
+      { name: "عمر الحسيني", apps: 9, total: 10 },
+      { name: "عبيدة الحسيني", apps: 9, total: 10 },
+      { name: "رفيق قويدر", apps: 7, total: 10 },
+      { name: "كندة", apps: 7, total: 10 },
+      { name: "هنا أيمن عامر", apps: 7, total: 10 },
+      { name: "أحمد البطنيجي", apps: 7, total: 10 },
+      { name: "سلسبيل قويدر", apps: 6, total: 10 },
+      { name: "دانة حسن برزق", apps: 5, total: 10 },
+      { name: "عبد الكريم حسن برزق ", apps: 5, total: 10 },
+      { name: "محمد حسن برزق", apps: 5, total: 10 },
+      { name: "نبيل محمد", apps: 4, total: 10 },
+      { name: "رفيق خليل أبورقعة", apps: 4, total: 10 },
+      { name: "أسيل قويدر", apps: 4, total: 10 },
+      { name: "كرمل متولي", apps: 4, total: 10 },
+      { name: "اركان محمود احمد الشاعر", apps: 2, total: 10 },
+      { name: "عصام الاطرش", apps: 2, total: 10 },
+      { name: "شذى ماجد أبوعاصي", apps: 2, total: 10 },
+      { name: "عمر أيمن", apps: 2, total: 10 },
+      { name: "شهد", apps: 2, total: 10 },
+      { name: "عبدالله عبدالحليم سلامة الهسي", apps: 2, total: 10 },
+      { name: "عبد الرحمن", apps: 1, total: 10 },
+      { name: "علي حسام نعيم", apps: 1, total: 10 },
+      { name: "محمد أحمد فوزي", apps: 1, total: 10 },
+      { name: "عبد الرحمن أحمد فوزي", apps: 1, total: 10 },
+      { name: "سلمى أحمد فوزي ", apps: 1, total: 10 },
+      { name: "عبد الله احمد فوزي", apps: 1, total: 10 },
+      { name: "كنان", apps: 1, total: 10 },
+      { name: "حبببه حاتم", apps: 1, total: 10 },
+      { name: "إبراهيم كمال البنا", apps: 1, total: 10 },
+      { name: "شادى صباح", apps: 1, total: 10 },
+      { name: "دانية سمير الرملاوي", apps: 1, total: 10 }
+    ];
+
+    const table = document.getElementById("studentsTable");
+
+    students.forEach(student => {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = student.name;
+      row.appendChild(nameCell);
+
+      const appsCell = document.createElement("td");
+      for (let i = 0; i < student.apps; i++) {
+        const star = document.createElement("span");
+        star.className = "star";
+        star.addEventListener('mouseenter', () => {
+          playSound(220 + (i * 50));
+        });
+        appsCell.appendChild(star);
+      }
+      row.appendChild(appsCell);
+
+      const remainingCell = document.createElement("td");
+      const remaining = student.total - student.apps;
+      remainingCell.innerHTML = `<span class="remaining">${remaining}</span>`;
+      row.appendChild(remainingCell);
+
+      table.appendChild(row);
+    });
+
+    const icons = ["⭐","🎮","🕹️","🎲","🚀","🎧","🎵","✨","🎯"];
+    for (let i = 0; i < 25; i++) {
+      const icon = document.createElement("div");
+      icon.className = "bg-icon";
+      icon.textContent = icons[Math.floor(Math.random() * icons.length)];
+      icon.style.left = Math.random() * 100 + "vw";
+      icon.style.fontSize = (Math.random() * 2 + 1.5) + "em";
+      icon.style.animationDuration = (Math.random() * 15 + 10) + "s";
+      icon.style.animationDelay = (Math.random() * 20) + "s";
+      document.body.appendChild(icon);
+    }
+  </script>
+</body>
+</html>
